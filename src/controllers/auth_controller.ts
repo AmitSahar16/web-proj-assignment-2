@@ -1,0 +1,160 @@
+import { Request, Response } from 'express';
+import User from '../models/user';
+import bcrypt from 'bcrypt';
+import { generateAccessToken, generateRefreshToken, getRefreshTokenFromHeader, verifyRefreshToken } from '../utils/authUtils';
+
+const register = async (req: Request, res: Response) => {
+  const { email, password, username } = req.body;
+
+  if (!email || !password || !username) {
+    console.error('missing one of the following: email, password, username');
+
+    return res
+      .status(400)
+      .send('missing one of the following: email, password, username');
+  }
+
+  try {
+    const existingUser = await User.findOne({ email: email });
+
+    if (existingUser) {
+      console.error('email already exists');
+
+      return res.status(409).send('email already exists');
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const encryptedPassword = await bcrypt.hash(password, salt);
+
+    const user = await User.create({
+      email: email,
+      password: encryptedPassword,
+      username: username,
+    });
+
+    console.info('new user added to db');
+
+    return res.status(201).send(user);
+  } catch (err) {
+    console.error('error while trying to register');
+    return res.status(500).send('error while trying to register');
+  }
+};
+
+const login = async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    console.error('missing email or password');
+    return res.status(400).send('missing email or password');
+  }
+
+  try {
+    const user = await User.findOne({ email: email });
+
+    if (!user) {
+      console.error('email is incorrect');
+      return res.status(401).send('email is incorrect');
+    }
+
+    const match = await bcrypt.compare(password, user.password);
+
+    if (!match) {
+      console.error('password is incorrect');
+      return res.status(401).send('password is incorrect');
+    }
+
+    const accessToken = generateAccessToken({ _id: user._id });
+    const refreshToken = generateRefreshToken({ _id: user._id });
+
+    if (!user.refreshTokens) {
+      user.refreshTokens = [refreshToken];
+    } else {
+      user.refreshTokens.push(refreshToken);
+    }
+
+    await user.save();
+
+    return res.status(200).send({
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+    });
+  } catch (err) {
+    console.error('error while trying to login');
+    return res.status(500).send('error while trying to login');
+  }
+};
+
+const logout = async (req: Request, res: Response) => {
+  const refreshToken = getRefreshTokenFromHeader(req.headers);
+
+  if (!refreshToken) {
+    return res.sendStatus(401);
+  }
+
+  try {
+    const tokenPayload = verifyRefreshToken(refreshToken);
+    const user = await User.findOne(tokenPayload);
+
+    if (!user.refreshTokens || !user.refreshTokens.includes(refreshToken)) {
+      user.refreshTokens = [];
+      await user.save();
+
+      return res.sendStatus(401);
+    } else {
+      user.refreshTokens = user.refreshTokens.filter(
+        (token) => token !== refreshToken
+      );
+
+      await user.save();
+      return res.sendStatus(200);
+    }
+  } catch (err) {
+    console.error('error while trying to logout');
+    res.sendStatus(500).send('error while trying to logout');
+  }
+};
+
+const refresh = async (req: Request, res: Response) => {
+  const refreshToken = getRefreshTokenFromHeader(req.headers);
+
+  if (!refreshToken) {
+    return res.sendStatus(401);
+  }
+
+  try {
+    const tokenPayload = verifyRefreshToken(refreshToken);
+    const user = await User.findOne(tokenPayload);
+
+    if (!user.refreshTokens || !user.refreshTokens.includes(refreshToken)) {
+      user.refreshTokens = [];
+      await user.save();
+      return res.sendStatus(401);
+    }
+
+    const accessToken = generateAccessToken(tokenPayload);
+    const newRefreshToken = generateRefreshToken(tokenPayload);
+
+    user.refreshTokens = user.refreshTokens.filter(
+      (token) => token !== refreshToken
+    );
+    
+    user.refreshTokens.push(newRefreshToken);
+    await user.save();
+
+    return res.status(200).send({
+      accessToken: accessToken,
+      refreshToken: newRefreshToken,
+    });
+  } catch (err) {
+    console.error('error while trying to refresh');
+    res.sendStatus(500).send('error while trying to refresh');
+  }
+};
+
+export default {
+  register,
+  login,
+  logout,
+  refresh,
+};
