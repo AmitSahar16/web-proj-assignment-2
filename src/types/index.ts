@@ -10,16 +10,17 @@ export interface IUser {
 
 export interface IComment {
   _id?: string;
-  user: string;
   text: string;
-  createdAt: Date;
+  post: string;
+  user: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface IPost {
   _id: string;
   message: string;
   user: string;
-  comments: IComment[];
 }
 
 export interface IAuthRequest extends Request {
@@ -27,7 +28,7 @@ export interface IAuthRequest extends Request {
 }
 
 export interface ITokenPayload {
-  _id: string 
+  _id: string
 }
 
 export interface IAuthResponse {

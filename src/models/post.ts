@@ -12,13 +12,6 @@ const postSchema = new mongoose.Schema<IPost>(
       required: true,
       ref: 'User',
     },
-    comments: [
-      {
-        user: { type: String, required: true, ref: 'User' },
-        text: { type: String, required: true },
-        createdAt: { type: Date, default: Date.now },
-      },
-    ],
   },
   { timestamps: true }
 );

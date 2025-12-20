@@ -1,6 +1,8 @@
 import express from 'express';
 import postsController from '../controllers/posts_controller';
+import commentsController from '../controllers/comments_controller';
 import authMiddleware from '../middleware/auth';
+import { checkPostOwnership } from '../middleware/ownership';
 
 const router = express.Router();
 
@@ -197,6 +199,7 @@ router.post(
 router.put(
   '/:id',
   authMiddleware,
+  checkPostOwnership,
   postsController.updatePostById.bind(postsController)
 );
 
@@ -228,7 +231,41 @@ router.put(
 router.delete(
   '/:id',
   authMiddleware,
+  checkPostOwnership,
   postsController.deleteById.bind(postsController)
+);
+
+/**
+ * @swagger
+ * /posts/{postId}/comments:
+ *   get:
+ *     summary: Get all comments for a specific post
+ *     tags: [Posts]
+ *     parameters:
+ *       - in: path
+ *         name: postId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the post
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of comments for the post
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Comment'
+ *       500:
+ *         description: Error retrieving comments
+ */
+router.get(
+  '/:postId/comments',
+  authMiddleware,
+  commentsController.getCommentsByPostId.bind(commentsController)
 );
 
 export default router;

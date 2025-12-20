@@ -42,26 +42,29 @@ const register = async (req: Request, res: Response) => {
 };
 
 const login = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { identifier, password } = req.body;
 
-  if (!email || !password) {
-    console.error('missing email or password');
-    return res.status(400).send('missing email or password');
+  if (!identifier || !password) {
+    console.error('missing identifier or password');
+    return res.status(400).send('missing identifier or password');
   }
 
   try {
-    const user = await User.findOne({ email: email });
+    const isEmail = identifier.includes('@');
+    const query = isEmail ? { email: identifier } : { username: identifier };
+
+    const user = await User.findOne(query);
 
     if (!user) {
-      console.error('email is incorrect');
-      return res.status(401).send('email is incorrect');
+      console.error('user not found');
+      return res.status(401).send('invalid credentials');
     }
 
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
       console.error('password is incorrect');
-      return res.status(401).send('password is incorrect');
+      return res.status(401).send('invalid credentials');
     }
 
     const accessToken = generateAccessToken({ _id: user._id });
@@ -138,7 +141,7 @@ const refresh = async (req: Request, res: Response) => {
     user.refreshTokens = user.refreshTokens.filter(
       (token) => token !== refreshToken
     );
-    
+
     user.refreshTokens.push(newRefreshToken);
     await user.save();
 
