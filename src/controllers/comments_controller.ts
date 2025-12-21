@@ -13,6 +13,22 @@ class CommentsController extends BaseController<IComment> {
     await super.post(req, res);
   }
 
+  async createCommentForPost(req: IAuthRequest, res: Response) {
+    try {
+      const comment = await this.model.create({
+        text: req.body.text,
+        post: req.params.postId,
+        user: req.user._id
+      });
+
+      const populatedComment = await comment.populate('user', 'username email');
+      res.status(201).send(populatedComment);
+    } catch (err) {
+      console.error('error while adding comment to a post');
+      res.status(409).json({ message: err.message });
+    }
+  }
+
   async getCommentsByPostId(req: Request, res: Response) {
     try {
       const comments = await this.model

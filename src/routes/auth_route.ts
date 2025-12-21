@@ -114,7 +114,7 @@ const router = express.Router();
  *       500:
  *         description: unexpected error
  */
-router.post("/register", authController.register);
+router.post('/register', authController.register);
 
 /**
  * @swagger
@@ -140,7 +140,7 @@ router.post("/register", authController.register);
  *       500:
  *         description: unexpected error
  */
-router.post("/login", authController.login);
+router.post('/login', authController.login);
 
 /**
  * @swagger
@@ -159,7 +159,7 @@ router.post("/login", authController.login);
  *       500:
  *         description: unexpected error
  */
-router.get("/logout", authController.logout);
+router.get('/logout', authController.logout);
 
 /**
  * @swagger
@@ -182,6 +182,6 @@ router.get("/logout", authController.logout);
  *       500:
  *         description: unexpected error
  */
-router.get("/refresh", authController.refresh);
+router.get('/refresh', authController.refresh);
 
 export default router;

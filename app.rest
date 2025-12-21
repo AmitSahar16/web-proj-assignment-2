@@ -1,91 +1,116 @@
 @base = http://localhost:3000
-@postId = {{postId}}
-@commentId = {{commentId}}
+@accessToken = 
+@refreshToken = 
+@postId = 
+@commentId = 
+@userId = 
 
-###
-# Create post
-POST {{base}}/post
-Content-Type: application/json
-
-{
-  "message": "My first post body",
-  "sender": "123456789"
-}
-
-###
-# Get all posts
-GET {{base}}/post
-
-###
-# Get posts by sender
-GET {{base}}/post?sender=123456789
-
-###
-# Get post by id
-GET {{base}}/post/{{postId}}
-
-###
-# Replace post content
-PUT {{base}}/post/{{postId}}
-Content-Type: application/json
-
-{
-  "message": "Updated message",
-  "sender": "123456789"
-}
-
-###
-# Create comment
-POST {{base}}/comment
-Content-Type: application/json
-
-{
-  "post": "{{postId}}",
-  "text": "Nice post!",
-  "author": "987654321"
-}
-
-###
-# Get all comments
-GET {{base}}/comment
-
-###
-# Get comments for a post
-GET {{base}}/comment?post={{postId}}
-
-###
-# Update comment
-PUT {{base}}/comment/{{commentId}}
-Content-Type: application/json
-
-{
-  "post": "{{postId}}",
-  "text": "Edited comment text",
-  "author": "987654321"
-}
-
-###
-# Delete comment
-DELETE {{base}}/comment/{{commentId}}
-
-###
-# User register
+### Register User
 POST {{base}}/auth/register
-Content-Type: application/json
+Content-Type: application/x-www-form-urlencoded
 
-{
-    "email": "user1@gmail.com",
-    "password": "123456789"
-}
+username=testuser&email=test@example.com&password=123456
 
-###
-# User login
+### Login with email
 POST {{base}}/auth/login
 Content-Type: application/json
 
 {
-    "email": "user2@gmail.com",
-    "password": "987654321"
+  "identifier": "test@example.com",
+  "password": "123456"
 }
 
-//todo: the user controller
+### Login with username
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{
+  "identifier": "testuser",
+  "password": "123456"
+}
+
+### Refresh Token
+GET {{base}}/auth/refresh
+Authorization: Bearer {{refreshToken}}
+
+### Logout
+POST {{base}}/auth/logout
+Authorization: Bearer {{refreshToken}}
+
+### Get My User Info
+GET {{base}}/users/me
+Authorization: Bearer {{accessToken}}
+
+### Update My User Info
+PUT {{base}}/users
+Content-Type: application/x-www-form-urlencoded
+Authorization: Bearer {{accessToken}}
+
+username=updateduser&email=updated@example.com&password=newpass123
+
+### Get All Posts
+GET {{base}}/posts
+
+### Get Post by ID
+GET {{base}}/posts/{{postId}}
+
+### Get My Posts
+GET {{base}}/posts/user/me
+Authorization: Bearer {{accessToken}}
+
+### Create Post
+POST {{base}}/posts
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "message": "This is my first post!"
+}
+
+### Update Post
+PUT {{base}}/posts/{{postId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "message": "This is my updated post!"
+}
+
+### Delete Post
+DELETE {{base}}/posts/{{postId}}
+Authorization: Bearer {{accessToken}}
+
+### Get All Comments
+GET {{base}}/comments
+Authorization: Bearer {{accessToken}}
+
+### Get Comment by ID
+GET {{base}}/comments/{{commentId}}
+Authorization: Bearer {{accessToken}}
+
+### Get Comments for a Post
+GET {{base}}/posts/{{postId}}/comments
+Authorization: Bearer {{accessToken}}
+
+### Create Comment
+POST {{base}}/comments
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "text": "Great post!",
+  "post": "{{postId}}"
+}
+
+### Update Comment
+PUT {{base}}/comments/{{commentId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "text": "Updated comment text"
+}
+
+### Delete Comment
+DELETE {{base}}/comments/{{commentId}}
+Authorization: Bearer {{accessToken}}
