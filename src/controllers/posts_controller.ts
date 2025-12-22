@@ -10,6 +10,8 @@ class PostsController extends BaseController<IPost> {
   }
 
   async create(req: IAuthRequest, res: Response) {
+    req.body.user = req.user._id;
+
     await super.post(req, res);
   }
 
@@ -21,9 +23,7 @@ class PostsController extends BaseController<IPost> {
 
   async getPostById(req: Request, res: Response) {
     try {
-      const post = await (
-        await this.model.findById(req.params.id).populate('user')
-      ).populate('comments.user');
+      const post = await this.model.findById(req.params.id).populate('user');
 
       res.send(post);
     } catch (err) {

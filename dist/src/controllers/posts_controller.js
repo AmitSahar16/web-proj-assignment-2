@@ -38,7 +38,7 @@ class PostsController extends base_controller_1.BaseController {
     getPostById(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const post = yield (yield this.model.findById(req.params.id).populate('user')).populate('comments.user');
+                const post = yield this.model.findById(req.params.id).populate('user');
                 res.send(post);
             }
             catch (err) {

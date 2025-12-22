@@ -35,7 +35,6 @@ const router = express_1.default.Router();
  *         user: 'userid12345'
  *         message: 'Nice post!'
  */
-//todo: add comments schema
 /**
  * @swagger
  * /posts:
@@ -82,10 +81,12 @@ router.get('/', posts_controller_1.default.get.bind(posts_controller_1.default))
 router.get('/:id', posts_controller_1.default.getPostById.bind(posts_controller_1.default));
 /**
  * @swagger
- * /posts/user/me
+ * /posts/user/me:
  *   get:
  *     summary: get all my posts
  *     tags: [Posts]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: list of posts with the user id

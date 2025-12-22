@@ -37,6 +37,7 @@ const checkPostOwnership = (req, res, next) => __awaiter(void 0, void 0, void 0,
     }
     catch (error) {
         res.status(500).json({ message: 'Server error' });
+        return;
     }
 });
 exports.checkPostOwnership = checkPostOwnership;
@@ -62,6 +63,7 @@ const checkCommentOwnership = (req, res, next) => __awaiter(void 0, void 0, void
     }
     catch (error) {
         res.status(500).json({ message: 'Server error' });
+        return;
     }
 });
 exports.checkCommentOwnership = checkCommentOwnership;

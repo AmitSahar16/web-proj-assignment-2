@@ -5,7 +5,7 @@
 @commentId = 
 @userId = 
 
-### Register User
+### Register User (step 1)
 POST {{base}}/auth/register
 Content-Type: application/json
 
@@ -15,7 +15,7 @@ Content-Type: application/json
   "password": "123456"
 }
 
-### Login with email
+### Login with email (step 2 - then copy tokens to variables above)
 POST {{base}}/auth/login
 Content-Type: application/json
 

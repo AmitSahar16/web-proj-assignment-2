@@ -22,7 +22,7 @@ export const verifyAccessToken = (token: string): ITokenPayload => {
   return jwt.verify(token, ACCESS_TOKEN_SECRET) as ITokenPayload;
 };
 
-export const verifyRefreshToken = (token: string): ITokenPayload => {
+export const verifyRefreshToken = (token: string): ITokenPayload => {  
   return jwt.verify(token, REFRESH_TOKEN_SECRET) as ITokenPayload;
 };
 

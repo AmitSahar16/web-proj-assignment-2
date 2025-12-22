@@ -1,12 +1,12 @@
 {
-  "name": "Web proj assignment 2",
+  "name": "web-proj-assignment-2",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
     "build": "tsc",
     "start": "tsc && node --env-file=.env dist/app.js",
-    "dev": "nodemon --exec ts-node src/app.ts",
+    "dev": "nodemon --exec ts-node -r dotenv/config src/app.ts",
     "debug": "node --env-file=.env --inspect dist/app.js",
     "coverage": "tsc && jest --detectOpenHandles --coverage --runInBand --forceExit",
     "test": "tsc && jest --detectOpenHandles --runInBand --forceExit",

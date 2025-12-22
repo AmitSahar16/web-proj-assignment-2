@@ -55,7 +55,7 @@ const router = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/Comment'
  */
-router.get('/', authMiddleware, commentsController.get.bind(commentsController));
+router.get('/', commentsController.get.bind(commentsController));
 
 // Get comment by ID
 /**
@@ -81,7 +81,7 @@ router.get('/', authMiddleware, commentsController.get.bind(commentsController))
  *             schema:
  *               $ref: '#/components/schemas/Comment'
  */
-router.get('/:id', authMiddleware, commentsController.getById.bind(commentsController));
+router.get('/:id', commentsController.getById.bind(commentsController));
 
 // Create a new comment
 /**

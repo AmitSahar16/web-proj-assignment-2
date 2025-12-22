@@ -4,8 +4,6 @@ import authMiddleware from '../middleware/auth';
 
 const router = express.Router();
 
-router.use(authMiddleware);
-
 /**
  * @swagger
  * tags:

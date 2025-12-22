@@ -32,6 +32,7 @@ export const checkPostOwnership = async (
     next();
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
+    return;
   }
 };
 
@@ -64,6 +65,7 @@ export const checkCommentOwnership = async (
     next();
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
+    return;
   }
 };
 

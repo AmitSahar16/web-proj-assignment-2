@@ -99,6 +99,10 @@ const logout = async (req: Request, res: Response) => {
     const tokenPayload = verifyRefreshToken(refreshToken);
     const user = await User.findOne(tokenPayload);
 
+    if (!user) {
+      return res.sendStatus(401);
+    }
+
     if (!user.refreshTokens || !user.refreshTokens.includes(refreshToken)) {
       user.refreshTokens = [];
       await user.save();
@@ -113,8 +117,8 @@ const logout = async (req: Request, res: Response) => {
       return res.sendStatus(200);
     }
   } catch (err) {
-    console.error('error while trying to logout');
-    res.sendStatus(500).send('error while trying to logout');
+    console.error('error while trying to logout', err);
+    return res.status(500).send('error while trying to logout');
   }
 };
 
@@ -128,6 +132,10 @@ const refresh = async (req: Request, res: Response) => {
   try {
     const tokenPayload = verifyRefreshToken(refreshToken);
     const user = await User.findOne(tokenPayload);
+
+    if (!user) {
+      return res.sendStatus(401);
+    }
 
     if (!user.refreshTokens || !user.refreshTokens.includes(refreshToken)) {
       user.refreshTokens = [];
@@ -150,8 +158,8 @@ const refresh = async (req: Request, res: Response) => {
       refreshToken: newRefreshToken,
     });
   } catch (err) {
-    console.error('error while trying to refresh');
-    res.sendStatus(500).send('error while trying to refresh');
+    console.error('error while trying to refresh', err);
+    return res.status(500).send('error while trying to refresh');
   }
 };
 

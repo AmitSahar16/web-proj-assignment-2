@@ -33,7 +33,7 @@ const router = express.Router();
  *         user: 'userid12345'
  *         message: 'Nice post!'
  */
-//todo: add comments schema
+
 /**
  * @swagger
  * /posts:
@@ -82,10 +82,12 @@ router.get('/:id', postsController.getPostById.bind(postsController));
 
 /**
  * @swagger
- * /posts/user/me
+ * /posts/user/me:
  *   get:
  *     summary: get all my posts
  *     tags: [Posts]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: list of posts with the user id
@@ -129,82 +131,7 @@ router.get(
  *        409:
  *          description: Error while trying to create new post
  */
-router.post('/', authMiddleware, postsController.post.bind(postsController));
-
-/**
- * @swagger
- * /posts/{postId}/comment:
- *   get:
- *     summary: Get all comments for a specific post
- *     tags: [Posts]
- *     parameters:
- *       - in: path
- *         name: postId
- *         schema:
- *           type: string
- *         required: true
- *         description: The ID of the post
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: List of comments for the post
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Comment'
- *       500:
- *         description: Error retrieving comments
- */
-router.get(
-  '/:postId/comment',
-  authMiddleware,
-  commentsController.getCommentsByPostId.bind(commentsController)
-);
-
-/**
- * @swagger
- * /posts/{postId}/comment:
- *   post:
- *     summary: Add a comment to a specific post
- *     tags: [Posts]
- *     parameters:
- *       - in: path
- *         name: postId
- *         schema:
- *           type: string
- *         required: true
- *         description: The ID of the post to comment on
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - text
- *             properties:
- *               text:
- *                 type: string
- *     responses:
- *        201:
- *          description: Comment was added successfully
- *          content:
- *            application/json:
- *              schema:
- *                $ref: '#/components/schemas/Comment'
- *        409:
- *          description: Error while trying to add comment to a post
- */
-router.post(
-  '/:postId/comment',
-  authMiddleware,
-  commentsController.createCommentForPost.bind(commentsController)
-);
+router.post('/', authMiddleware, postsController.create.bind(postsController));
 
 /**
  * @swagger
@@ -299,7 +226,6 @@ router.delete(
  */
 router.get(
   '/:postId/comments',
-  authMiddleware,
   commentsController.getCommentsByPostId.bind(commentsController)
 );
 

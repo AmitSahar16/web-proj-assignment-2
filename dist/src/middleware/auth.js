@@ -6,7 +6,7 @@ const authMiddleware = (req, res, next) => {
         const authHeader = req.headers.authorization;
         const token = authHeader && authHeader.split(' ')[1]; // Bearer <token>
         if (!token) {
-            res.sendStatus(401).json({ message: 'No token provided' });
+            res.status(401).json({ message: 'No token provided' });
             return;
         }
         const decoded = (0, authUtils_1.verifyAccessToken)(token);
@@ -15,6 +15,7 @@ const authMiddleware = (req, res, next) => {
     }
     catch (error) {
         res.status(401).json({ message: 'Invalid or expired token' });
+        return;
     }
 };
 exports.default = authMiddleware;
