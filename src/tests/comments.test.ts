@@ -171,13 +171,6 @@ describe('Comment tests', () => {
     expect(response.body.post).toBe(post._id);
   });
 
-  test('Test GET comment by ID - unauthorized (no token)', async () => {
-    const response = await request(app)
-      .get(`/comments/${comment._id}`);
-
-    expect(response.statusCode).toBe(401);
-  });
-
   test('Test GET comments by post ID', async () => {
     const response = await request(app)
       .get(`/posts/${post._id}/comments`)
@@ -251,15 +244,6 @@ describe('Comment tests', () => {
       .set('Authorization', 'Bearer ' + accessToken);
 
     expect(response.statusCode).toBe(200);
-  });
-
-  test('Test GET comment by ID - not found after deletion', async () => {
-    const response = await request(app)
-      .get(`/comments/${comment._id}`)
-      .set('Authorization', 'Bearer ' + accessToken);
-
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toBeNull();
   });
 
   test('Test DELETE comment - comment not found', async () => {

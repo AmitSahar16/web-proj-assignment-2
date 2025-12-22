@@ -23,6 +23,7 @@ class PostsController extends base_controller_1.BaseController {
             post: { get: () => super.post }
         });
         return __awaiter(this, void 0, void 0, function* () {
+            req.body.user = req.user._id;
             yield _super.post.call(this, req, res);
         });
     }

@@ -56,7 +56,7 @@ const router = express_1.default.Router();
  *               items:
  *                 $ref: '#/components/schemas/Comment'
  */
-router.get('/', auth_1.default, comments_controller_1.default.get.bind(comments_controller_1.default));
+router.get('/', comments_controller_1.default.get.bind(comments_controller_1.default));
 // Get comment by ID
 /**
  * @swagger
@@ -81,7 +81,7 @@ router.get('/', auth_1.default, comments_controller_1.default.get.bind(comments_
  *             schema:
  *               $ref: '#/components/schemas/Comment'
  */
-router.get('/:id', auth_1.default, comments_controller_1.default.getById.bind(comments_controller_1.default));
+router.get('/:id', comments_controller_1.default.getById.bind(comments_controller_1.default));
 // Create a new comment
 /**
  * @swagger

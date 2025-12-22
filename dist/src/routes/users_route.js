@@ -7,7 +7,6 @@ const express_1 = __importDefault(require("express"));
 const users_controller_1 = __importDefault(require("../controllers/users_controller"));
 const auth_1 = __importDefault(require("../middleware/auth"));
 const router = express_1.default.Router();
-router.use(auth_1.default);
 /**
  * @swagger
  * tags:

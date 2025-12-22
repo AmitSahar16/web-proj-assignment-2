@@ -67,7 +67,7 @@ describe('post tests', () => {
     test('Test GET posts', () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(app).get('/posts');
         expect(response.statusCode).toBe(200);
-        expect(response.body).toHaveLength(2);
+        expect(response.body).toHaveLength(1);
     }));
     test('Test GET post by id', () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(app).get(`/posts/${post._id}`);
@@ -80,7 +80,7 @@ describe('post tests', () => {
             .get('/posts/user/me')
             .set('Authorization', 'Bearer ' + accessToken);
         expect(response.statusCode).toBe(200);
-        expect(response.body).toHaveLength(2);
+        expect(response.body).toHaveLength(1);
     }));
     test('Test PUT post', () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(app)

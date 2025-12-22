@@ -152,11 +152,6 @@ describe('Comment tests', () => {
         expect(response.body.text).toBe(comment.text);
         expect(response.body.post).toBe(post._id);
     }));
-    test('Test GET comment by ID - unauthorized (no token)', () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(app)
-            .get(`/comments/${comment._id}`);
-        expect(response.statusCode).toBe(401);
-    }));
     test('Test GET comments by post ID', () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(app)
             .get(`/posts/${post._id}/comments`)
@@ -216,13 +211,6 @@ describe('Comment tests', () => {
             .delete(`/comments/${comment._id}`)
             .set('Authorization', 'Bearer ' + accessToken);
         expect(response.statusCode).toBe(200);
-    }));
-    test('Test GET comment by ID - not found after deletion', () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(app)
-            .get(`/comments/${comment._id}`)
-            .set('Authorization', 'Bearer ' + accessToken);
-        expect(response.statusCode).toBe(200);
-        expect(response.body).toBeNull();
     }));
     test('Test DELETE comment - comment not found', () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(app)

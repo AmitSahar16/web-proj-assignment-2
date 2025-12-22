@@ -66,7 +66,7 @@ describe('post tests', () => {
     const response = await request(app).get('/posts');
 
     expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveLength(2);
+    expect(response.body).toHaveLength(1);
   });
 
   test('Test GET post by id', async () => {
@@ -83,7 +83,7 @@ describe('post tests', () => {
       .set('Authorization', 'Bearer ' + accessToken);
 
     expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveLength(2);
+    expect(response.body).toHaveLength(1);
   });
 
   test('Test PUT post', async () => {

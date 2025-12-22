@@ -126,18 +126,22 @@ const refresh = async (req: Request, res: Response) => {
   const refreshToken = getRefreshTokenFromHeader(req.headers);
 
   if (!refreshToken) {
+    console.error('No refresh token provided');
     return res.sendStatus(401);
   }
 
   try {
     const tokenPayload = verifyRefreshToken(refreshToken);
-    const user = await User.findOne(tokenPayload);
+
+    const user = await User.findById(tokenPayload._id);
 
     if (!user) {
+      console.error('User not found for refresh token');
       return res.sendStatus(401);
     }
 
     if (!user.refreshTokens || !user.refreshTokens.includes(refreshToken)) {
+      console.error('Refresh token not found in user tokens array');
       user.refreshTokens = [];
       await user.save();
       return res.sendStatus(401);

@@ -125,72 +125,7 @@ router.get('/user/me', auth_1.default, posts_controller_1.default.getPostsByMe.b
  *        409:
  *          description: Error while trying to create new post
  */
-router.post('/', auth_1.default, posts_controller_1.default.post.bind(posts_controller_1.default));
-/**
- * @swagger
- * /posts/{postId}/comment:
- *   get:
- *     summary: Get all comments for a specific post
- *     tags: [Posts]
- *     parameters:
- *       - in: path
- *         name: postId
- *         schema:
- *           type: string
- *         required: true
- *         description: The ID of the post
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: List of comments for the post
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Comment'
- *       500:
- *         description: Error retrieving comments
- */
-router.get('/:postId/comment', auth_1.default, comments_controller_1.default.getCommentsByPostId.bind(comments_controller_1.default));
-/**
- * @swagger
- * /posts/{postId}/comment:
- *   post:
- *     summary: Add a comment to a specific post
- *     tags: [Posts]
- *     parameters:
- *       - in: path
- *         name: postId
- *         schema:
- *           type: string
- *         required: true
- *         description: The ID of the post to comment on
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - text
- *             properties:
- *               text:
- *                 type: string
- *     responses:
- *        201:
- *          description: Comment was added successfully
- *          content:
- *            application/json:
- *              schema:
- *                $ref: '#/components/schemas/Comment'
- *        409:
- *          description: Error while trying to add comment to a post
- */
-router.post('/:postId/comment', auth_1.default, comments_controller_1.default.createCommentForPost.bind(comments_controller_1.default));
+router.post('/', auth_1.default, posts_controller_1.default.create.bind(posts_controller_1.default));
 /**
  * @swagger
  * /posts/{id}:
@@ -270,6 +205,6 @@ router.delete('/:id', auth_1.default, ownership_1.checkPostOwnership, posts_cont
  *       500:
  *         description: Error retrieving comments
  */
-router.get('/:postId/comments', auth_1.default, comments_controller_1.default.getCommentsByPostId.bind(comments_controller_1.default));
+router.get('/:postId/comments', comments_controller_1.default.getCommentsByPostId.bind(comments_controller_1.default));
 exports.default = router;
 //# sourceMappingURL=posts_route.js.map

@@ -14,7 +14,7 @@ const user: IUser = {
 };
 
 beforeAll(async () => {
-  process.env.ACCESS_TOKEN_EXPIRY = '4s';
+  process.env.ACCESS_TOKEN_EXPIRY = '3s';
   app = (await startServer()).app;
   await User.deleteMany({ email: user.email });
   await User.deleteMany({ email: user.email + '1' });
@@ -101,19 +101,26 @@ describe('Auth tests', () => {
   });
 
   test('Test access after timeout of token', async () => {
-    await new Promise((resolve) => setTimeout(() => resolve('done'), 5000));
+    await new Promise((resolve) => setTimeout(() => resolve('done'), 4000));
 
     const response = await request(app)
       .get('/users/me')
       .set('Authorization', 'Bearer ' + accessToken);
 
-    expect(response.statusCode).not.toBe(200);
+    expect(response.statusCode).toBe(401);
   });
 
   test('Test refresh token', async () => {
+    // Get a fresh access and refresh token first
+    const loginResponse = await request(app).post('/auth/login').send({
+      identifier: user.email,
+      password: user.password
+    });
+    const freshRefreshToken = loginResponse.body.refreshToken;
+
     const response = await request(app)
       .get('/auth/refresh')
-      .set('Authorization', 'Bearer ' + refreshToken)
+      .set('Authorization', 'Bearer ' + freshRefreshToken)
       .send();
 
     expect(response.statusCode).toBe(200);

@@ -6,6 +6,7 @@ exports.default = {
     testEnvironment: "node",
     roots: ["<rootDir>/src"],
     testTimeout: 10000,
-    testMatch: ["**/?(*.)+(spec|test).ts"]
+    testMatch: ["**/?(*.)+(spec|test).ts"],
+    setupFiles: ['dotenv/config']
 };
 //# sourceMappingURL=jest.config.js.map

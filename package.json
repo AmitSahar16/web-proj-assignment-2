@@ -11,6 +11,7 @@
     "coverage": "tsc && jest --detectOpenHandles --coverage --runInBand --forceExit",
     "test": "tsc && jest --detectOpenHandles --runInBand --forceExit",
     "usersTest": "tsc && jest --detectOpenHandles --forceExit --runInBand ./src/tests/users.test.ts",
+    "commentsTest": "tsc && jest --detectOpenHandles --forceExit --runInBand ./src/tests/comments.test.ts",
     "postsTest": "tsc && jest --detectOpenHandles --forceExit --runInBand ./src/tests/posts.test.ts",
     "authTest": "tsc && jest --detectOpenHandles --forceExit --runInBand ./src/tests/auth.test.ts"
   },

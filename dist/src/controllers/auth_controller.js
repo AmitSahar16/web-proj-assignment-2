@@ -90,6 +90,9 @@ const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const tokenPayload = (0, authUtils_1.verifyRefreshToken)(refreshToken);
         const user = yield user_1.default.findOne(tokenPayload);
+        if (!user) {
+            return res.sendStatus(401);
+        }
         if (!user.refreshTokens || !user.refreshTokens.includes(refreshToken)) {
             user.refreshTokens = [];
             yield user.save();
@@ -102,19 +105,25 @@ const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
     }
     catch (err) {
-        console.error('error while trying to logout');
-        res.sendStatus(500).send('error while trying to logout');
+        console.error('error while trying to logout', err);
+        return res.status(500).send('error while trying to logout');
     }
 });
 const refresh = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const refreshToken = (0, authUtils_1.getRefreshTokenFromHeader)(req.headers);
     if (!refreshToken) {
+        console.error('No refresh token provided');
         return res.sendStatus(401);
     }
     try {
         const tokenPayload = (0, authUtils_1.verifyRefreshToken)(refreshToken);
-        const user = yield user_1.default.findOne(tokenPayload);
+        const user = yield user_1.default.findById(tokenPayload._id);
+        if (!user) {
+            console.error('User not found for refresh token');
+            return res.sendStatus(401);
+        }
         if (!user.refreshTokens || !user.refreshTokens.includes(refreshToken)) {
+            console.error('Refresh token not found in user tokens array');
             user.refreshTokens = [];
             yield user.save();
             return res.sendStatus(401);
@@ -130,8 +139,8 @@ const refresh = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         });
     }
     catch (err) {
-        console.error('error while trying to refresh');
-        res.sendStatus(500).send('error while trying to refresh');
+        console.error('error while trying to refresh', err);
+        return res.status(500).send('error while trying to refresh');
     }
 });
 exports.default = {
