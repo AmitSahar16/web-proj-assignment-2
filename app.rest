@@ -7,9 +7,13 @@
 
 ### Register User
 POST {{base}}/auth/register
-Content-Type: application/x-www-form-urlencoded
+Content-Type: application/json
 
-username=testuser&email=test@example.com&password=123456
+{
+  "username": "testuser",
+  "email": "test@example.com",
+  "password": "123456"
+}
 
 ### Login with email
 POST {{base}}/auth/login
@@ -43,10 +47,14 @@ Authorization: Bearer {{accessToken}}
 
 ### Update My User Info
 PUT {{base}}/users
-Content-Type: application/x-www-form-urlencoded
+Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
-username=updateduser&email=updated@example.com&password=newpass123
+{
+  "username": "updateduser",
+  "email": "updated@example.com",
+  "password": "newpass123"
+}
 
 ### Get All Posts
 GET {{base}}/posts

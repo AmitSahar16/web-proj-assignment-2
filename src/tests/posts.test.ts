@@ -22,9 +22,11 @@ beforeAll(async () => {
   await User.deleteMany({ email: user.email });
   const response = await request(app)
     .post('/auth/register')
-    .field('username', user.username)
-    .field('email', user.email)
-    .field('password', user.password);
+    .send({
+      username: user.username,
+      email: user.email,
+      password: user.password
+    });
 
   user._id = response.body._id;
   post.user = user._id;
@@ -49,8 +51,10 @@ describe('post tests', () => {
     const response = await request(app)
       .post('/posts')
       .set('Authorization', 'Bearer ' + accessToken)
-      .field('user', post.user)
-      .field('message', post.message);
+      .send({
+        user: post.user,
+        message: post.message
+      });
     post._id = response.body._id;
 
     expect(response.statusCode).toBe(201);

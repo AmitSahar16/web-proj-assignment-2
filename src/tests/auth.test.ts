@@ -32,9 +32,11 @@ describe('Auth tests', () => {
   test('Test Register', async () => {
     const response = await request(app)
       .post('/auth/register')
-      .field('username', user.username)
-      .field('email', user.email)
-      .field('password', user.password);
+      .send({
+        username: user.username,
+        email: user.email,
+        password: user.password
+      });
 
     expect(response.statusCode).toBe(201);
   });
@@ -42,9 +44,11 @@ describe('Auth tests', () => {
   test('Test Register exist email', async () => {
     const response = await request(app)
       .post('/auth/register')
-      .field('username', user.username)
-      .field('email', user.email)
-      .field('password', user.password);
+      .send({
+        username: user.username,
+        email: user.email,
+        password: user.password
+      });
 
     expect(response.statusCode).toBe(409);
   });
@@ -52,8 +56,10 @@ describe('Auth tests', () => {
   test('Test Register missing password', async () => {
     const response = await request(app)
       .post('/auth/register')
-      .field('username', user.username)
-      .field('email', user.email);
+      .send({
+        username: user.username,
+        email: user.email
+      });
 
     expect(response.statusCode).toBe(400);
   });

@@ -29,9 +29,11 @@ describe('User tests', () => {
   const addUser = async (user: IUser) => {
     const response = await request(app)
       .post('/auth/register')
-      .field('username', user.username)
-      .field('email', user.email)
-      .field('password', user.password);
+      .send({
+        username: user.username,
+        email: user.email,
+        password: user.password
+      });
     user._id = response.body._id;
 
     expect(response.statusCode).toBe(201);
@@ -76,9 +78,11 @@ describe('User tests', () => {
     const updatedUser = { ...user, username: 'User123' };
     const response = await request(app)
       .put('/users')
-      .field('email', updatedUser.email)
-      .field('password', updatedUser.password)
-      .field('username', updatedUser.username)
+      .send({
+        email: updatedUser.email,
+        password: updatedUser.password,
+        username: updatedUser.username
+      })
       .set('Authorization', 'Bearer ' + accessToken);
 
     expect(response.statusCode).toBe(200);

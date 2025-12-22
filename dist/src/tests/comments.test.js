@@ -38,9 +38,11 @@ beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
     yield user_1.default.deleteMany({ email: user.email });
     const response = yield (0, supertest_1.default)(app)
         .post('/auth/register')
-        .field('username', user.username)
-        .field('email', user.email)
-        .field('password', user.password);
+        .send({
+        username: user.username,
+        email: user.email,
+        password: user.password
+    });
     user._id = response.body._id;
     post.user = user._id;
     const loginResponse = yield (0, supertest_1.default)(app).post('/auth/login').send({
@@ -51,9 +53,11 @@ beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
     yield user_1.default.deleteMany({ email: user2.email });
     const response2 = yield (0, supertest_1.default)(app)
         .post('/auth/register')
-        .field('username', user2.username)
-        .field('email', user2.email)
-        .field('password', user2.password);
+        .send({
+        username: user2.username,
+        email: user2.email,
+        password: user2.password
+    });
     user2._id = response2.body._id;
     const loginResponse2 = yield (0, supertest_1.default)(app).post('/auth/login').send({
         identifier: user2.email,

@@ -53,17 +53,17 @@ const router = express_1.default.Router();
  *     UserLogin:
  *       type: object
  *       required:
- *         - email
+ *         - identifier
  *         - password
  *       properties:
- *         email:
+ *         identifier:
  *           type: string
- *           description: User email
+ *           description: User email or username
  *         password:
  *           type: string
  *           description: User password
  *       example:
- *         email: 'user1@gmail.com'
+ *         identifier: 'user1@gmail.com'
  *         password: '123456'
  */
 /**
@@ -95,7 +95,7 @@ const router = express_1.default.Router();
  *     requestBody:
  *       required: true
  *       content:
- *         multipart/form-data:
+ *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/User'
  *     responses:
@@ -133,7 +133,7 @@ router.post('/register', auth_controller_1.default.register);
  *             schema:
  *               $ref: '#/components/schemas/Tokens'
  *       401:
- *         description: email or password is incorrect
+ *         description: invalid credentials
  *       500:
  *         description: unexpected error
  */

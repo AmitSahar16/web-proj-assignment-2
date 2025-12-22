@@ -35,9 +35,11 @@ describe('User tests', () => {
     const addUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(app)
             .post('/auth/register')
-            .field('username', user.username)
-            .field('email', user.email)
-            .field('password', user.password);
+            .send({
+            username: user.username,
+            email: user.email,
+            password: user.password
+        });
         user._id = response.body._id;
         expect(response.statusCode).toBe(201);
         const response2 = yield (0, supertest_1.default)(app).post('/auth/login').send({
@@ -71,9 +73,11 @@ describe('User tests', () => {
         const updatedUser = Object.assign(Object.assign({}, user), { username: 'User123' });
         const response = yield (0, supertest_1.default)(app)
             .put('/users')
-            .field('email', updatedUser.email)
-            .field('password', updatedUser.password)
-            .field('username', updatedUser.username)
+            .send({
+            email: updatedUser.email,
+            password: updatedUser.password,
+            username: updatedUser.username
+        })
             .set('Authorization', 'Bearer ' + accessToken);
         expect(response.statusCode).toBe(200);
         expect(response.body.username).toBe(updatedUser.username);

@@ -30,9 +30,11 @@ beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
     yield user_1.default.deleteMany({ email: user.email });
     const response = yield (0, supertest_1.default)(app)
         .post('/auth/register')
-        .field('username', user.username)
-        .field('email', user.email)
-        .field('password', user.password);
+        .send({
+        username: user.username,
+        email: user.email,
+        password: user.password
+    });
     user._id = response.body._id;
     post.user = user._id;
     const response2 = yield (0, supertest_1.default)(app).post('/auth/login').send({
@@ -53,8 +55,10 @@ describe('post tests', () => {
         const response = yield (0, supertest_1.default)(app)
             .post('/posts')
             .set('Authorization', 'Bearer ' + accessToken)
-            .field('user', post.user)
-            .field('message', post.message);
+            .send({
+            user: post.user,
+            message: post.message
+        });
         post._id = response.body._id;
         expect(response.statusCode).toBe(201);
         expect(response.body.user).toBe(user._id);

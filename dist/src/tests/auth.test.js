@@ -38,24 +38,30 @@ describe('Auth tests', () => {
     test('Test Register', () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(app)
             .post('/auth/register')
-            .field('username', user.username)
-            .field('email', user.email)
-            .field('password', user.password);
+            .send({
+            username: user.username,
+            email: user.email,
+            password: user.password
+        });
         expect(response.statusCode).toBe(201);
     }));
     test('Test Register exist email', () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(app)
             .post('/auth/register')
-            .field('username', user.username)
-            .field('email', user.email)
-            .field('password', user.password);
+            .send({
+            username: user.username,
+            email: user.email,
+            password: user.password
+        });
         expect(response.statusCode).toBe(409);
     }));
     test('Test Register missing password', () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(app)
             .post('/auth/register')
-            .field('username', user.username)
-            .field('email', user.email);
+            .send({
+            username: user.username,
+            email: user.email
+        });
         expect(response.statusCode).toBe(400);
     }));
     test('Test Login', () => __awaiter(void 0, void 0, void 0, function* () {

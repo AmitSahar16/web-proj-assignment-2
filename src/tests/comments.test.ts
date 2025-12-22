@@ -31,9 +31,11 @@ beforeAll(async () => {
   await User.deleteMany({ email: user.email });
   const response = await request(app)
     .post('/auth/register')
-    .field('username', user.username)
-    .field('email', user.email)
-    .field('password', user.password);
+    .send({
+      username: user.username,
+      email: user.email,
+      password: user.password
+    });
 
   user._id = response.body._id;
   post.user = user._id;
@@ -47,9 +49,11 @@ beforeAll(async () => {
   await User.deleteMany({ email: user2.email });
   const response2 = await request(app)
     .post('/auth/register')
-    .field('username', user2.username)
-    .field('email', user2.email)
-    .field('password', user2.password);
+    .send({
+      username: user2.username,
+      email: user2.email,
+      password: user2.password
+    });
 
   user2._id = response2.body._id;
 

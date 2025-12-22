@@ -111,7 +111,7 @@ router.get('/user/me', auth_1.default, posts_controller_1.default.getPostsByMe.b
  *     requestBody:
  *       required: true
  *       content:
- *         multipart/form-data:
+ *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/Post'
  *     responses:
