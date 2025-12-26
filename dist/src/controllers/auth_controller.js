@@ -65,12 +65,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         const accessToken = (0, authUtils_1.generateAccessToken)({ _id: user._id });
         const refreshToken = (0, authUtils_1.generateRefreshToken)({ _id: user._id });
-        if (!user.refreshTokens) {
-            user.refreshTokens = [refreshToken];
-        }
-        else {
-            user.refreshTokens.push(refreshToken);
-        }
+        user.refreshTokens = [refreshToken];
         yield user.save();
         return res.status(200).send({
             accessToken: accessToken,
@@ -128,8 +123,9 @@ const refresh = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             yield user.save();
             return res.sendStatus(401);
         }
-        const accessToken = (0, authUtils_1.generateAccessToken)(tokenPayload);
-        const newRefreshToken = (0, authUtils_1.generateRefreshToken)(tokenPayload);
+        const payload = { _id: tokenPayload._id };
+        const accessToken = (0, authUtils_1.generateAccessToken)(payload);
+        const newRefreshToken = (0, authUtils_1.generateRefreshToken)(payload);
         user.refreshTokens = user.refreshTokens.filter((token) => token !== refreshToken);
         user.refreshTokens.push(newRefreshToken);
         yield user.save();

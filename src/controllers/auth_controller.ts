@@ -70,11 +70,7 @@ const login = async (req: Request, res: Response) => {
     const accessToken = generateAccessToken({ _id: user._id });
     const refreshToken = generateRefreshToken({ _id: user._id });
 
-    if (!user.refreshTokens) {
-      user.refreshTokens = [refreshToken];
-    } else {
-      user.refreshTokens.push(refreshToken);
-    }
+    user.refreshTokens = [refreshToken];
 
     await user.save();
 
@@ -147,8 +143,9 @@ const refresh = async (req: Request, res: Response) => {
       return res.sendStatus(401);
     }
 
-    const accessToken = generateAccessToken(tokenPayload);
-    const newRefreshToken = generateRefreshToken(tokenPayload);
+    const payload = { _id: tokenPayload._id };
+    const accessToken = generateAccessToken(payload);
+    const newRefreshToken = generateRefreshToken(payload);
 
     user.refreshTokens = user.refreshTokens.filter(
       (token) => token !== refreshToken
